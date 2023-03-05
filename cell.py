@@ -10,6 +10,7 @@ class Cell:
         self.is_mine = False
         self.is_flagged = False
         self.is_opened = False
+        self.neighboring_mines = 0
 
         # create button
         cell_btn = tk.Button(frame, height=2, width=2)
@@ -20,13 +21,33 @@ class Cell:
 
     # what happens when mouse it left-clicked
     def left_click(self, event):
+
+        # already opened cells or flagged cells cannot be left-clicked
+        if self.is_opened or self.is_flagged:
+            return
+
+        # is uncovered cell is mine -> GAME OVER
+        if self.is_mine:
+            event.widget.configure(text="F", fg="black")
+            return
+
         event.widget.configure(text="O", fg="green")
         self.is_opened = True
-        print("Left button was clicked!")
 
     # what happens when mouse it right-clicked
     def right_click(self, event):
+
+        # already opened cell cannot be right-clicked
+        if self.is_opened:
+            return
+
+        # un-flag a cell
+        if self.is_flagged:
+            event.widget.configure(text="")
+            self.is_flagged = False
+            return
         event.widget.configure(text="F", fg="red")
         self.is_flagged = True
-        print("Right button was clicked!")
+
+
 
