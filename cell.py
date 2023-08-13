@@ -1,6 +1,5 @@
 import tkinter as tk
 
-
 class Cell:
 
     def __init__(self, x, y, frame):
@@ -19,7 +18,7 @@ class Cell:
         self.button = cell_btn
         # NOTE: For windows "<Button-3>" for right click
 
-    # what happens when mouse it left-clicked
+    # what happens when mouse is left-clicked
     def left_click(self, event):
 
         # already opened cells or flagged cells cannot be left-clicked
@@ -34,7 +33,7 @@ class Cell:
         event.widget.configure(text="O", fg="green")
         self.is_opened = True
 
-    # what happens when mouse it right-clicked
+    # what happens when mouse is right-clicked
     def right_click(self, event):
 
         # already opened cell cannot be right-clicked
@@ -48,6 +47,3 @@ class Cell:
             return
         event.widget.configure(text="F", fg="red")
         self.is_flagged = True
-
-
-
