@@ -111,7 +111,7 @@ class Minesweeper:
             if self.neighboring_mines_count(cell) == 0:
                 self.uncover_surrounding_cells(cell, [cell])
             if self.open_cells_count() == (GRID_SIZE * GRID_SIZE) - MINES:
-                self.win()  # last cell not opened??
+                self.win() 
 
     def neighboring_mines_count(self, cell) -> int:
         mines_count = 0
