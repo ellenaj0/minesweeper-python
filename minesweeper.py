@@ -1,5 +1,4 @@
 import tkinter as tk
-from tkmacosx import Button
 from tkinter import messagebox
 import random
 
@@ -17,7 +16,6 @@ class Minesweeper:
         center_frame.pack()
         self.center_frame = center_frame
         self.all_cells = []
-        # self.open_cell_count = 0
 
         # set up grid
         self.setup_grid()
@@ -36,32 +34,21 @@ class Minesweeper:
                         "button": tk.Button(self.center_frame, height=2, width=2, highlightthickness=0)
                         }
 
-                # to be updated - start
-                #if (x_coord, y_coord) in mine_indices:
-                #    cell["isMine"] = True
-                # to be updated - end
-
                 cell["button"].bind("<Button-1>", self.left_click_wrapper(cell))
                 cell["button"].bind("<Button-2>", self.right_click_wrapper(cell))
-
-                # NOTE: For windows "<Button-3>" for right click
 
                 cell["button"].grid(row=x_coord, column=y_coord, sticky="nsew")
                 new_row.append(cell)
             self.all_cells.append(new_row)
 
     def determine_mines(self, cell):
-        # Todo: find a better way to do this
         indices = [(row, col) for row in range(GRID_SIZE) for col in range(GRID_SIZE)]
         indices.remove((cell["x"], cell["y"]))
         mine_indices = random.sample(indices, MINES)
-        print(mine_indices)
         for x_coord in range(GRID_SIZE):
             for y_coord in range(GRID_SIZE):
-                # to be updated - start
                 if (x_coord, y_coord) in mine_indices:
                     self.all_cells[x_coord][y_coord]["isMine"] = True
-                # to be updated - end
 
     def get_neighboring_cells(self, cell) -> list:
         neighbors_coord = [(cell["x"] - 1, cell["y"] - 1),  # top left
@@ -75,12 +62,11 @@ class Minesweeper:
                            ]
         neighbors = []
 
-        # Todo: find better way to do this
         for (x, y) in neighbors_coord:
             try:
                 if x >= 0 and y >= 0:
                     neighbors.append(self.all_cells[x][y])
-            except IndexError:  # why do I need to catch this exception?
+            except IndexError:
                 pass
         return neighbors
 
@@ -90,9 +76,7 @@ class Minesweeper:
     def left_click_wrapper(self, cell):
         return lambda event: self.left_click(cell)
 
-    # what happens when the mouse if right-clicked
     def right_click(self, cell):
-        # print("right button clicked")
         # already opened cell cannot be right-clicked
         if cell["isOpened"]:
             return
@@ -106,7 +90,6 @@ class Minesweeper:
         cell["button"].configure(text="F", fg="red")
         cell["isFlagged"] = True
 
-    # what happens when mouse it left-clicked
     def left_click(self, cell):
         # determine mines after the first cell has been clicked to exclude the firstly clicked cell from the
         # mine selection indices
@@ -144,8 +127,6 @@ class Minesweeper:
     def open_cell(self, cell):
         cell["button"].configure(text=f"{self.neighboring_mines_count(cell)}", fg="green")
         cell["isOpened"] = True
-        # self.open_cell_count += 1
-        # print(self.open_cell_count)
 
         if cell["isFlagged"]:
             cell["isFlagged"] = False
@@ -173,7 +154,7 @@ class Minesweeper:
             self.window.destroy()
 
     def game_over(self):
-        # messagebox.showerror("Game Over", "You pressed on a mine!")
+
         answer = messagebox.askyesno("Game Over", "You pressed on a mine! Restart game?")
         if answer:
             self.all_cells.clear()
@@ -185,7 +166,5 @@ class Minesweeper:
 if __name__ == '__main__':
     root = tk.Tk()
     root.title("Minesweeper")
-    # root.geometry("300x300")
     minesweeper = Minesweeper(root)
-
     root.mainloop()
